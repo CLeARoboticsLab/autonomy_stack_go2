@@ -263,10 +263,9 @@ void standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) {
 
   p_pre->process(msg, ptr);
 
-  // ==== INSERT THIS IMMEDIATELY AFTER ====  // taking this out makes things a
-  // litte worse; up and down motion while walking
+  // ==== Cropping ====  /
 
-  const float max_range_crop = 7.5f; // crop everything beyond 30 meters
+  const float max_range_crop = 7.5f; // crop everything beyond this many
   PointCloudXYZI::Ptr ptr_cropped(new PointCloudXYZI());
 
   for (const auto &pt : ptr->points) {
@@ -280,9 +279,9 @@ void standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) {
   ptr_cropped->is_dense = true;
   ptr = ptr_cropped; // overwrite original ptr with cropped one
 
-  // ==== END OF INSERT ====
+  // ==== END Cropping ====
 
-  // ==== UNDISTORT LIDAR SCAN USING IMU ====  // I can't tell if this does much
+  // ==== UNDISTORT LIDAR SCAN USING IMU ==== 
 
   if (!ptr->points.empty()) {
     // Get latest angular velocity from imu_last
@@ -304,8 +303,8 @@ void standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) {
     double dy = pt_first.y - pt_last.y;
     double dz = pt_first.z - pt_last.z;
     double dist = std::sqrt(dx * dx + dy * dy + dz * dz);
-    std::cout << "[Undistort Check] Distance between first and last point: "
-              << dist << " m" << std::endl;
+    // std::cout << "[Undistort Check] Distance between first and last point: "
+    //           << dist << " m" << std::endl;
   }
 
   // =============================
