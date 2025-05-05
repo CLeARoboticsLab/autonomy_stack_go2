@@ -23,7 +23,7 @@
 #include <sensor_msgs/msg/imu.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 
-#define MAX_INI_COUNT (100)
+#define MAX_INI_COUNT (10000)
 
 class ImuProcess {
 public:
